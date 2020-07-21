@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
+    @State private var showAddPopover: Bool = false
     @State private var newTitle: String = ""
     @State private var newNote: String = ""
     @State private var newCount: String = ""
@@ -23,16 +24,39 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            TextField("Title", text: $newTitle)
-                .padding()
-            TextField("Note", text: $newNote)
-                .padding()
-            TextField("Count", text: $newCount)
-                .padding()
             Button(action: {
-                self.addCounter(title: self.newTitle, note: self.newNote, count: self.newCount)
+                self.showAddPopover = true
             }) {
-                Text("Save")
+                Text("Add Counter")
+            }
+            .padding(.all)
+            .popover(isPresented: self.$showAddPopover) {
+                VStack {
+                    HStack {
+                        Button(action: {
+                            self.showAddPopover = false
+                        }) {
+                            Text("Cancel")
+                        }
+                        .padding(.all)
+                        Spacer()
+                        Button(action: {
+                            self.addCounter(title: self.newTitle, note: self.newNote, count: self.newCount)
+                            self.showAddPopover = false
+                        }) {
+                            Text("Save")
+                        }
+                        .padding(.all)
+                    }
+                    Divider()
+                    TextField("Title", text: self.$newTitle)
+                        .padding()
+                    TextField("Note", text: self.$newNote)
+                        .padding()
+                    TextField("Count", text: self.$newCount)
+                        .padding()
+                    Spacer()
+                }
             }
             Divider()
             ScrollView {
@@ -51,13 +75,15 @@ struct ContentView: View {
     }
     
     func addCounter(title: String, note: String, count: String) {
-        let newCounter = Counter(context: self.managedObjectContext)
-        newCounter.title = title
-        newCounter.note = note
-        if let countInt: Int64 = Int64(count) {
-            newCounter.count = countInt
+        if (!title.isEmpty && Int64(count) != nil) {
+            let newCounter = Counter(context: self.managedObjectContext)
+            newCounter.title = title
+            newCounter.note = note
+            if let countInt: Int64 = Int64(count) {
+                newCounter.count = countInt
+            }
+            self.saveContext()
         }
-        self.saveContext()
     }
     
     func saveContext() {
