@@ -35,8 +35,17 @@ struct ContentView: View {
                 Text("Save")
             }
             Divider()
-            List(counters, id: \.self) { counter in
-                Text("\(counter.title ?? "")")
+            ScrollView {
+                ForEach(counters, id: \.self) { counter in
+                    CounterItemView(counter: counter, saveCallBack: self.saveContext)
+                        .frame(maxWidth: .infinity)
+                        .contextMenu {
+                            Button(action: {}) {
+                                Text("Delete")
+                                Image(systemName: "trash")
+                            }
+                        }
+                }
             }
         }
     }
