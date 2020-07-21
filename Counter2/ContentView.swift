@@ -35,6 +35,7 @@ struct ContentView: View {
                     HStack {
                         Button(action: {
                             self.showAddPopover = false
+                            self.resetPopoverFields()
                         }) {
                             Text("Cancel")
                         }
@@ -43,6 +44,7 @@ struct ContentView: View {
                         Button(action: {
                             self.addCounter(title: self.newTitle, note: self.newNote, count: self.newCount)
                             self.showAddPopover = false
+                            self.resetPopoverFields()
                         }) {
                             Text("Save")
                         }
@@ -84,6 +86,12 @@ struct ContentView: View {
             }
             self.saveContext()
         }
+    }
+    
+    func resetPopoverFields() {
+        self.newTitle = ""
+        self.newNote = ""
+        self.newCount = ""
     }
     
     func saveContext() {
