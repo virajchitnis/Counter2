@@ -24,40 +24,47 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Button(action: {
-                self.showAddPopover = true
-            }) {
-                Text("Add Counter")
-            }
-            .padding(.all)
-            .popover(isPresented: self.$showAddPopover) {
-                VStack {
-                    HStack {
-                        Button(action: {
-                            self.showAddPopover = false
-                            self.resetPopoverFields()
-                        }) {
-                            Text("Cancel")
+            HStack {
+                Button(action: {
+                    self.update()
+                }) {
+                    Text("Update")
+                }
+                Button(action: {
+                    self.showAddPopover = true
+                }) {
+                    Text("Add Counter")
+                }
+                .padding(.all)
+                .popover(isPresented: self.$showAddPopover) {
+                    VStack {
+                        HStack {
+                            Button(action: {
+                                self.showAddPopover = false
+                                self.resetPopoverFields()
+                            }) {
+                                Text("Cancel")
+                            }
+                            .padding(.all)
+                            Spacer()
+                            Button(action: {
+                                self.addCounter(title: self.newTitle, note: self.newNote, count: self.newCount)
+                                self.showAddPopover = false
+                                self.resetPopoverFields()
+                            }) {
+                                Text("Save")
+                            }
+                            .padding(.all)
                         }
-                        .padding(.all)
+                        Divider()
+                        TextField("Title", text: self.$newTitle)
+                            .padding()
+                        TextField("Note", text: self.$newNote)
+                            .padding()
+                        TextField("Count", text: self.$newCount)
+                            .padding()
                         Spacer()
-                        Button(action: {
-                            self.addCounter(title: self.newTitle, note: self.newNote, count: self.newCount)
-                            self.showAddPopover = false
-                            self.resetPopoverFields()
-                        }) {
-                            Text("Save")
-                        }
-                        .padding(.all)
                     }
-                    Divider()
-                    TextField("Title", text: self.$newTitle)
-                        .padding()
-                    TextField("Note", text: self.$newNote)
-                        .padding()
-                    TextField("Count", text: self.$newCount)
-                        .padding()
-                    Spacer()
                 }
             }
             Divider()
@@ -76,6 +83,10 @@ struct ContentView: View {
                 }
             }
         }
+    }
+    
+    func update() {
+        self.managedObjectContext.refreshAllObjects()
     }
     
     func addCounter(title: String, note: String, count: String) {
