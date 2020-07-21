@@ -66,7 +66,9 @@ struct ContentView: View {
                     CounterItemView(counter: counter, saveCallBack: self.saveContext)
                         .frame(maxWidth: .infinity)
                         .contextMenu {
-                            Button(action: {}) {
+                            Button(action: {
+                                self.delete(counter: counter)
+                            }) {
                                 Text("Delete")
                                 Image(systemName: "trash")
                             }
@@ -86,6 +88,11 @@ struct ContentView: View {
             }
             self.saveContext()
         }
+    }
+    
+    func delete(counter: Counter) {
+        self.managedObjectContext.delete(counter)
+        self.saveContext()
     }
     
     func resetPopoverFields() {
