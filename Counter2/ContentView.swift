@@ -60,6 +60,7 @@ struct ContentView: View {
                             .padding()
                         Spacer()
                     }
+                    .frame(minWidth: 300.0)
                 }
             }
             Divider()
