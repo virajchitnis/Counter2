@@ -26,11 +26,6 @@ struct ContentView: View {
         VStack {
             HStack {
                 Button(action: {
-                    self.update()
-                }) {
-                    Text("Update")
-                }
-                Button(action: {
                     self.showAddPopover = true
                 }) {
                     Text("Add Counter")
@@ -83,10 +78,6 @@ struct ContentView: View {
                 }
             }
         }
-    }
-    
-    func update() {
-        self.managedObjectContext.refreshAllObjects()
     }
     
     func addCounter(title: String, note: String, count: String) {
